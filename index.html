@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="style.css">
+        <title>Final Assignment</title>
+    </head>
+    <body>
+        <div class="container">
+            <div class="title-container">
+                <h1>Auction</h1>
+            </div>
+            <div class="register-container">
+                <a id="register-button" class="button" href="#">
+                    Register
+                </a>
+                <span id="new-bidder-msg">New bidder registered!</span>
+            </div>
+            <div class="bid-container">
+                <a id="bid-button" class="button" href="#">
+                    Bid
+                </a>
+                <div class="bid-inputs">
+                    <select name="Address" id="Address-list">
+                        <option value="Address 1">Address 1</option>
+                        <option value="Address 2">Address 2</option>
+                        <option value="Address 3">Address 3</option>
+                        <option value="Address 4">Address 4</option>
+                    </select>
+                    <input type="text" placeholder="Item Number">
+                    <input type="text" placeholder="Amount">
+                    <span id="new-bid-msg">New bid registered!</span>
+                </div>
+            </div>
+            <div class="revealWinners-container">
+                <a id="revealWinners-button" class="button" href="#">
+                    Reveal Winners
+                </a>
+                <ul class="winners-list">
+                    <li>Winner 1</li>
+                    <li>Winner 2</li>
+                    <li>Winner 3</li>
+                </ul>
+            </div>
+        </div>
+    </body>
+    <script src="script.js"></script>
+</html>

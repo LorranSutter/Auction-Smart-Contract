@@ -1,0 +1,100 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: monospace;
+}
+
+:not(h1) {
+    font-size: large;
+    color: #9fa8da;
+}
+
+body {
+    background-color: #1C1C1C;
+}
+
+.container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    padding: 2em;
+    display: flex;
+    flex-direction: column;
+
+    background-color: #383838;
+    border-radius: 10px;
+}
+
+.container > div {
+    margin: 1em 0;
+    display: flex;
+    align-items: center;
+}
+
+.title-container {
+    display: flex;
+    justify-content: center;
+}
+
+.title-container h1 {
+    color: #7986CB;
+}
+
+.button, .button:active, .button:visited {
+    background-color: #5C6BC0;
+    border-radius: 30px;
+    width: 150px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: white !important;
+
+    margin-right: 1.5em;
+}
+
+.button:hover {
+    transform: scale(1.07);
+    transition: 0.1s;
+}
+
+#new-bidder-msg {
+    opacity: 0;
+}
+
+.bid-inputs {
+    display: flex;
+    flex-direction: column;
+}
+
+.bid-inputs input, option {
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px black solid;
+    outline: none;
+
+    margin: 0.5em 0;
+}
+  
+.bid-inputs select {
+    background-color: #383838;
+
+    margin: 0.5em 0;
+    
+    border: none;
+    -webkit-appearance: button;
+    appearance: button;
+    outline: none;
+}
+
+#new-bid-msg {
+    opacity: 0;
+}
+
+.winners-list {
+    opacity: 0;
+    list-style: none;
+}
