@@ -1,0 +1,29 @@
+{
+  "name": "bcdv1016-finalassignment",
+  "version": "1.0.0",
+  "description": "Final Assignment for Introduction to Smart Contracts",
+  "main": "script.js",
+  "dependencies": {
+    "ganache-cli": "^6.9.1",
+    "web3": "github:ethereum/web3.js"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LorranSutter/BCDV1016.git"
+  },
+  "keywords": [
+    "Solidity",
+    "Web3",
+    "Ganache-CLI"
+  ],
+  "author": "Lorran Sutter",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LorranSutter/BCDV1016/issues"
+  },
+  "homepage": "https://github.com/LorranSutter/BCDV1016#readme"
+}

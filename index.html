@@ -4,6 +4,12 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="style.css">
+        <!-- <script src="connection.js"></script> -->
+        <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+                integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" 
+                crossorigin="anonymous">
+        </script>
         <title>Final Assignment</title>
     </head>
     <body>
@@ -12,38 +18,289 @@
                 <h1>Auction</h1>
             </div>
             <div class="register-container">
-                <a id="register-button" class="button" href="#">
-                    Register
-                </a>
+                <span id="register-button" class="button"> Register </span>
                 <span id="new-bidder-msg">New bidder registered!</span>
             </div>
             <div class="bid-container">
-                <a id="bid-button" class="button" href="#">
-                    Bid
-                </a>
+                <span id="bid-button" class="button"> Bid </span>
                 <div class="bid-inputs">
-                    <select name="Address" id="Address-list">
-                        <option value="Address 1">Address 1</option>
-                        <option value="Address 2">Address 2</option>
-                        <option value="Address 3">Address 3</option>
-                        <option value="Address 4">Address 4</option>
-                    </select>
-                    <input type="text" placeholder="Item Number">
-                    <input type="text" placeholder="Amount">
+                    <select name="Address" id="Address-list"></select>
+                    <input id="item-number" type="text" placeholder="Item Number">
+                    <input id="amount" type="text" placeholder="Amount">
                     <span id="new-bid-msg">New bid registered!</span>
                 </div>
             </div>
             <div class="revealWinners-container">
-                <a id="revealWinners-button" class="button" href="#">
-                    Reveal Winners
-                </a>
-                <ul class="winners-list">
-                    <li>Winner 1</li>
-                    <li>Winner 2</li>
-                    <li>Winner 3</li>
-                </ul>
+                <span id="revealWinners-button" class="button"> Reveal Winners </span>
+                <ul id="winners-list"></ul>
             </div>
+            <div id="log"></div>
         </div>
     </body>
     <script src="script.js"></script>
+    <script>
+        var web3;
+        var counter;
+        const url = "http://localhost:8545";
+        const contractAddress = "0x51f2A24cC0465fda1d2B1330749E2C479Cd4466b";
+        const abi = [
+	{
+		"inputs": [],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "constructor"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "beneficiary",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_itemId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_count",
+				"type": "uint256"
+			}
+		],
+		"name": "bid",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "id",
+				"type": "uint256"
+			}
+		],
+		"name": "getPersonDetails",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "items",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "itemId",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "register",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "revealWinners",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "winners",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	}
+];
+        
+        let accountToBeRegistered = 0;
+
+        function getAccountToBeRegistered() {
+            if(accountToBeRegistered < 9) {
+                accountToBeRegistered += 1;
+                return accountToBeRegistered
+            }
+            return -1;
+        }
+
+        function log(message) {
+            $("#log")
+                .append("<p>")
+                .text(message);
+            $("#log").scrollTop($("#log").prop('scrollHeight'));
+        }
+
+        function waitForTransactionReceipt(hash, cb) {
+            web3.eth.getTransactionReceipt(hash, (err, receipt) => {
+                if (receipt != null) {
+                    cb(receipt);
+                } else {
+
+                    window.setTimeout(() => {
+                        waitForTransactionReceipt(hash, cb);
+                    }, 1000);
+                }
+            })
+        }
+
+        $(function () {
+            $("#register-button").click(e => {
+                e.preventDefault();
+
+                log("Calling register on Auction contract...");
+
+                let accountId = getAccountToBeRegistered();
+                if(accountId === -1) {
+                    log("Maximum number of accounts reached!");
+                    return;
+                }
+
+                web3.eth.getAccounts((err, accounts) => {
+                    let account = accounts[accountId];
+                    counter.methods.register().send(
+                        { from: account, to: contractAddress },
+                        (err, hash) => {
+                            if(err) {
+                                log(`${err}`);
+                                return;
+                            }
+                            waitForTransactionReceipt(hash, (receipt) => {
+                                log(`Account ${account} registered!`);
+                                $('#Address-list').append(`<option value="${account}"> ${account} </option>`);
+                                $('#new-bidder-msg').css('opacity', '1');
+                            })
+                        }
+                    );
+                })
+            });
+
+            $("#bid-button").click(e => {
+                e.preventDefault();
+
+                let account = $('#Address-list').val();
+                let itemNumber = $('#item-number').val();
+                let amount = $('#amount').val();
+
+                log("Calling Bid on Auction contract...");
+
+                counter.methods.bid(itemNumber, amount).send(
+                    { from: account, to: contractAddress },
+                    (err, hash) => {
+                        if(err) {
+                            log(`${err}`);
+                            return;
+                        }
+                        waitForTransactionReceipt(hash, (receipt) => {
+                            log("Calling bid on Auction contract is successful!");
+                            $('#new-bid-msg').css('opacity', '1');
+                        })
+                    }
+                );
+            });
+
+            $("#revealWinners-button").click(e => {
+                e.preventDefault();
+
+                log("Calling reavealWinners on Auction contract...");
+
+                web3.eth.getAccounts((err, accounts) => {
+                    counter.methods.revealWinners().send(
+                        { from: accounts[0], to: contractAddress },
+                        (err, hash) => {
+                            if(err) {
+                                log(`${err}`);
+                                return;
+                            }
+                            waitForTransactionReceipt(hash, (receipt) => {
+                                web3.eth.getStorageAt(contractAddress, 0)
+                                        .then(x => {
+                                            $('#winners-list').append(`<li>${x}</li>`)
+                                        });
+                                web3.eth.getStorageAt(contractAddress, 1)
+                                        .then(x => {
+                                            $('#winners-list').append(`<li>${x}</li>`)
+                                        });
+                                web3.eth.getStorageAt(contractAddress, 2)
+                                        .then(x => {
+                                            $('#winners-list').append(`<li>${x}</li>`)
+                                        });
+
+                                log("Calling reavealWinners on Auction contract is successful!");
+                                $('#winners-list').css('opacity', '1');
+                            })
+                        }
+                    );
+                });
+            });
+
+            web3 = new Web3(url);
+            counter = new web3.eth.Contract(abi, contractAddress);
+        });
+    </script>
+
 </html>
