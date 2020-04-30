@@ -1,4 +1,4 @@
-# BCDV1016
+# Auction - Smart Contract
 
 Final project for the course BCDV1016 - Introduction to Smart Contracts from [Blockchain Development](https://www.georgebrown.ca/programs/blockchain-development-program-t175/) program from [George Brown College](https://www.georgebrown.ca)
 
