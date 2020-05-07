@@ -11,7 +11,7 @@ This assignment simulates an Auction having a fixed amount of items. Anyone with
 
 There is a user interface made with plain HTML/CSS/JS along with [web3.js](https://web3js.readthedocs.io/) and [Ganache CLI](https://github.com/trufflesuite/ganache-cli) in order to stablish a connection between the UI and smart contract deployed in [remix](https://remix.ethereum.org/).
 
-## :book: References
+## :book: References and tehcnologies :computer:
 - [Solidity](https://solidity.readthedocs.io/)
 - [web3.js](https://web3js.readthedocs.io/)
 - [Ganache CLI](https://github.com/trufflesuite/ganache-cli)
