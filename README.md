@@ -16,6 +16,6 @@ There is a user interface made with plain HTML/CSS/JS along with [web3.js](https
 
 ## :computer: Technologies
 - [Solidity](https://solidity.readthedocs.io/) - smart contract programming language
-- [Wb3.js](https://web3js.readthedocs.io/) - interact with smart contracts
+- [Web3.js](https://web3js.readthedocs.io/) - interact with smart contracts
 - [Ganache CLI](https://github.com/trufflesuite/ganache-cli) - blockchain emulator
 - [Remix](https://remix.ethereum.org/) - suite of tools for smart contracts
